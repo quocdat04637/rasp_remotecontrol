@@ -1,0 +1,14 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.device {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+h1 {
+    color: #333;
+}
