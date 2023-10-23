@@ -33,6 +33,17 @@ devices = {
 def get_device_status():
     return jsonify(devices)
 
+# API endpoint to update the fan speed
+@app.route('/api/fan-speed', methods=['POST'])
+def update_fan_speed():
+    data = request.get_json()
+    fanSpeed = data.get("fanSpeed")
+
+    if "fan" in devices and fanSpeed is not None:
+        devices["fan"]["speed"] = f"{fanSpeed}%"
+        # Here, you can add code to control the fan speed as needed.
+
+    return 'Success', 200
 
 # API endpoint để cập nhật trạng thái của các thiết bị
 @app.route('/api/device-status', methods=['POST'])

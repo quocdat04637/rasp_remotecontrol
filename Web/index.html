@@ -3,25 +3,42 @@
 <head>
     <title>Remote Device Management</title>
     <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <h1>Thông Tin Thiết Bị</h1>
+    <div class="main">
+        <h1>Thông Tin Thiết Bị</h1>
 
-    <div class="device" id="lightDevice">
-        <h2>Đèn</h2>
-        <p>Trạng thái: <span id="lightStatus">Loading...</span></p>
-        <p>Số lần bật: <span id="lightSwitchCount">Loading...</span></p>
-        <p>Thời gian sáng: <span id="lightUsageTime">Loading...</span></p>
+        <div class="device" id="lightDevice">
+            <h2>Đèn <i class="fa-regular fa-lightbulb"></i></h2>
+            <p class="status">Trạng thái: 
+                <i class="fa-solid fa-toggle-off"></i>
+                <span id="lightStatus">Loading...</span>
+            </p>
+            <p>Số lần bật: <span id="lightSwitchCount">Loading...</span></p>
+            <p>Thời gian sáng: 
+                <i class="fa-solid fa-hourglass"></i>
+                <span id="lightUsageTime">Loading...</span>
+            </p>
+        </div>
+    
+        <div class="device" id="fanDevice">
+            <h2>Quạt <i class="fa-solid fa-fan"></i></h2>
+            <p class="status">Trạng thái: 
+                <i class="fa-solid fa-toggle-off"></i>
+                <span id="fanStatus">Loading...</span>
+            </p>
+            <p>Tốc độ: 
+                <i class="fa-solid fa-gauge"></i>
+                <span id="fanSpeed">Loading...</span>
+            </p>
+            <p>Thời gian sử dụng: 
+                <i class="fa-solid fa-hourglass"></i>
+                <span id="fanUsageTime">Loading...</span>
+            </p>
+        </div>
+        <button id="refreshButton">Refresh</button>
     </div>
-
-    <div class="device" id="fanDevice">
-        <h2>Quạt</h2>
-        <p>Trạng thái: <span id="fanStatus">Loading...</span></p>
-        <p>Tốc độ: <span id="fanSpeed">Loading...</span></p>
-        <p>Thời gian sử dụng: <span id="fanUsageTime">Loading...</span></p>
-    </div>
-    <button id="refreshButton">Refresh</button>
-
     <script src="./main.js"></script>
 </body>
 </html>
