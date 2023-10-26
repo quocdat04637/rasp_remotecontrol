@@ -9,13 +9,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function refreshDeviceStatus() {
         // Gửi yêu cầu GET để lấy trạng thái từ API
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.36:8080/api/device-status")
             .then(response => response.json())
             .then(data => {
                     // Cập nhật thông tin từ dữ liệu lấy được
                     document.getElementById('lightStatus').textContent = data.light.status;
                     if (data.light.status == "On") {
                         lightStatusIcon.className = 'fa-solid fa-toggle-on';
+                        document.getElementById('lightStatus').textContent = "On"
+                    } else {
+                        lightStatusIcon.className = 'fa-solid fa-toggle-off';
                     }
                     document.getElementById('lightSwitchCount').textContent = data.light.switchCount;
                     document.getElementById('lightUsageTime').textContent = data.light.usageTime;
@@ -24,6 +27,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('fanStatus').textContent = data.fan.status;
                     if (data.fan.status == "High") {
                         fanStatusIcon.className = 'fa-solid fa-toggle-on';
+                        document.getElementById('fanStatus').textContent = "High"
+                    } else {
+                        fanStatusIcon.className = 'fa-solid fa-toggle-off';
                     }
                     document.getElementById('fanSpeed').textContent = data.fan.speed;
                     document.getElementById('fanUsageTime').textContent = data.fan.usageTime;

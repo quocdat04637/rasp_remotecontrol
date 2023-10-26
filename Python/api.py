@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 app = Flask(__name__)
@@ -10,9 +10,9 @@ cors = CORS(app)
 light_pin = 17  # GPIO pin cho đèn
 fan_pin = 18    # GPIO pin cho quạt
 
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(light_pin, GPIO.OUT)
-# GPIO.setup(fan_pin, GPIO.OUT)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(light_pin, GPIO.OUT)
+GPIO.setup(fan_pin, GPIO.OUT)
 
 # Thiết lập trạng thái ban đầu của các thiết bị
 devices = {
@@ -54,7 +54,7 @@ def update_device_status():
             if device == "light":
                 if status == "On":
                     # Bật đèn 
-                    #GPIO.output(light_pin, GPIO.HIGH)
+                    GPIO.output(light_pin, GPIO.HIGH)
                     devices[device]["status"] = "On"
                 
                     # Cập nhật trạng thái sử dụng của đèn
@@ -69,7 +69,7 @@ def update_device_status():
                         devices[device]["switchCount"] += 1
                 else:
                     # Tắt đèn
-                    #GPIO.output(light_pin, GPIO.LOW)
+                    GPIO.output(light_pin, GPIO.LOW)
                     devices[device]["status"] = "Off"
 
                     # Cập nhật trạng thái sử dụng của đèn
@@ -81,7 +81,7 @@ def update_device_status():
             elif device == "fan":
                 if status == "High":
                     # Điều chỉnh tốc độ quạt
-                    #GPIO.output(fan_pin, GPIO.HIGH)
+                    GPIO.output(fan_pin, GPIO.HIGH)
                     devices[device]["status"] = "High"
                     
                     # Cập nhật trạng thái sử dụng của quạt
@@ -94,12 +94,12 @@ def update_device_status():
                             devices[device]["usageTime"] = f"{elapsed_time:.1f} giờ"
                     
                         # Trích xuất giá trị tốc độ quạt từ yêu cầu
-                        fan_speed = data.get("fan_speed")
+                        fan_speed = data.get("fanSpeed")
                         if fan_speed is not None:
                             devices[device]["speed"] = f"{fan_speed}%"
                 else:
                     # Tắt quạt
-                    #GPIO.output(fan_pin, GPIO.LOW)
+                    GPIO.output(fan_pin, GPIO.LOW)
                     devices[device]["status"] = "Low"
                     
                     # Cập nhật trạng thái sử dụng của quạt
@@ -113,7 +113,7 @@ def update_device_status():
     return 'Success', 200
 
 if __name__ == '__main__':
-    #try:
+    try:
         app.run(host='0.0.0.0', port=8080)
-    #finally:
-        #GPIO.cleanup()
+    finally:
+        GPIO.cleanup()

@@ -8,19 +8,20 @@ cors = CORS(app)
 
 # Thiết lập GPIO cho đèn và quạt
 light = LED(17)  # GPIO pin cho đèn
-fan = PWMLED(18)  # GPIO pin cho quạt (PWM)
+fan = PWMLED(27)  # GPIO pin cho quạt (PWM)
+#fan.value = 0.5
 
 # Thiết lập trạng thái ban đầu của các thiết bị
 devices = {
     "light": {
         "status": "Off",
         "switchCount": 0,
-        "usageTime": "0 giờ"
+        "usageTime": "0 giay"
     },
     "fan": {
         "status": "Low",
         "speed": "0%",
-        "usageTime": "0 giờ"
+        "usageTime": "0 giay"
     }
 }
 
@@ -37,10 +38,9 @@ def update_device_status():
         if device in devices:
             if device == "light":
                 if status == "On":
-                    # Bật đèn 
+                    # Bật đèn
                     light.on()
                     devices[device]["status"] = "On"
-                
                     # Cập nhật trạng thái sử dụng của đèn
                     if devices[device]["status"] == "On":
                         current_time = time.time()
@@ -48,7 +48,7 @@ def update_device_status():
                             devices[device]["last_usage_time"] = current_time
                         else:
                             elapsed_time = current_time - devices[device]["last_usage_time"]
-                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giờ"
+                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giay"
 
                         devices[device]["switchCount"] += 1
                 else:
@@ -61,17 +61,18 @@ def update_device_status():
                         if "last_usage_time" in devices[device]:
                             current_time = time.time()
                             elapsed_time = current_time - devices[device]["last_usage_time"]
-                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giờ"              
+                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giay"
             elif device == "fan":
                 # Trích xuất giá trị tốc độ quạt từ yêu cầu (fan_speed từ 0 đến 1)
-                fan_speed = data.get("fanSpeed")
-                if fan_speed is not None:
-                    devices[device]["speed"] = f"{int(fan_speed * 100)}%"
-
+                #fan_speed = data.get("fanSpeed")
+                #print(f"Fan Speed: {fan_speed}")  # In giá trị tốc độ quạt
+                
                 if status == "High":
-                    # Điều chỉnh tốc độ quạt
-                    fan.value = fan_speed
                     devices[device]["status"] = "High"
+                    # Điều chỉnh tốc độ quạt
+                    #fan.value = float(devices[device]["speed"])
+                    fan.on()
+                    devices[device]["speed"] = f"{int(fan_speed * 100)}%"
                     
                     # Cập nhật trạng thái sử dụng của quạt
                     if devices[device]["status"] == "High":
@@ -80,24 +81,12 @@ def update_device_status():
                             devices[device]["last_usage_time"] = current_time
                         else:
                             elapsed_time = current_time - devices[device]["last_usage_time"]
-                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giờ"        
-                else:
-                    # Tắt quạt
-                    fan.off()
-                    devices[device]["status"] = "Low"
-                    
-                    # Cập nhật trạng thái sử dụng của quạt
-                    if devices[device]["status"] == "Low":
-                        if "last_usage_time" in devices[device]:
-                            current_time = time.time()
-                            elapsed_time = current_time - devices[device]["last_usage_time"]
-                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giờ"
-
-                        devices[device]["speed"] = "0%"
+                            devices[device]["usageTime"] = f"{elapsed_time:.1f} giay"
     return 'Success', 200
 
 if __name__ == '__main__':
-    try:
+    #try:
         app.run(host='0.0.0.0', port=8080)
-    finally:
+    #finally:
         GPIO.cleanup()
+
