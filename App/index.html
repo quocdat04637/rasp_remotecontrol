@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Raspberry Pi Control</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="rasp-control">
+        <h1>Raspberry Pi Control</h1>
+
+        <div id="lightDevice">
+            <h2>Đèn <i class="fa-regular fa-lightbulb"></i></h2>
+            <button id="lightButton">Bật Đèn</button>
+            <p>Trạng thái: <span id="lightStatus">Unknown</span></p>
+            <p>Độ sáng: <span id="lightBrightnessValue">Unknown</span></p>
+            <input type="range" id="lightBrightnessRange" min="0" max="100" step="1" value="0">
+            <br>
+             <!-- Thêm input cho số giây -->
+            <label for="turnOffDelay">Tự động tắt sau <span id="turnOffStep">?</span> giây</label>
+            <input type="number" id="turnOffDelay" min="0" step="1" value="0">
+            <br>
+            <label for="turnOnDelay">Tự động bật sau <span id="turnOnStep">?</span> giây</label>
+            <input type="number" id="turnOnDelay" min="0" step="1" value="0">
+        </div>
+
+        <div id="fanDevice">
+            <h2>Quạt <i class="fa-solid fa-fan"></i></h2>
+            <input type="range" id="fanSpeedRange" min="0" max="100" step="1" value="0">
+            <p>Tốc độ: <span id="fanSpeedValue">0%</span></p>
+            <p>Trạng thái: <span id="fanStatus">Unknown</span></p>
+        </div>
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
