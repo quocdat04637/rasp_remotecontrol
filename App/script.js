@@ -73,18 +73,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Xử lý sự kiện khi kéo thanh độ sáng đèn
     lightBrightnessRange.addEventListener("input", function() {
-        const brightness = lightBrightnessRange.value;
-        lightBrightnessValue.textContent = brightness + "%";
-        // Thay đổi trạng thái dựa vào brightness và gửi yêu cầu cập nhật
-        const newLightStatus = brightness > 0 ? "On" : "Off";
-        sendLightRequestUpdateBrightness(newLightStatus, brightness/100);
+        // Lấy trạng thái hiện tại của đèn
+        fetch("http://127.0.0.1:8080/api/device-status")
+        .then(response => response.json())
+        .then(data => {
+            const oldLightStatus = data.light.status;
+            const brightness = lightBrightnessRange.value;
+            lightBrightnessValue.textContent = brightness + "%";
+            // Thay đổi trạng thái dựa vào brightness và gửi yêu cầu cập nhật
+            const newLightStatus = brightness > 0 ? "On" : "Off";
+
+            sendLightRequestUpdateBrightness(newLightStatus, brightness/100, oldLightStatus != newLightStatus);
+        })
+        .catch(error => console.error(error));
     })
 
-    function sendLightRequestUpdateBrightness(newStatus, brightness) {
+    function sendLightRequestUpdateBrightness(newStatus, brightness, isDiffer) {
+        console.log(isDiffer);
         // Tạo đối tượng JSON để gửi lên máy chủ
         const requestData = {
             light: newStatus,
             brightness: brightness,
+            isDiffer: isDiffer
         };
 
         fetch("http://127.0.0.1:8080/api/device-status", {
@@ -96,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => {
             if (response.status === 200) {
-                // Cập nhật trạng thái quạt sau khi hoàn thành yêu cầu
+                // Cập nhật trạng thái đèn sau khi hoàn thành yêu cầu
                 lightStatus.textContent = newStatus;
                 lightButton.style.background = brightness > 0 ? "green": "red";
                 lightButton.textContent = newStatus;
@@ -218,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateFanSpeed(speed) {
         // Thay đổi trạng thái dựa vào speed và gửi yêu cầu cập nhật
-        const newFanStatus = speed > 0 ? "High" : "Low";
+        const newFanStatus = speed > 0 ? "On" : "Off";
         sendFanRequest(newFanStatus, speed);
     }
 

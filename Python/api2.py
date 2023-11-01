@@ -8,7 +8,7 @@ cors = CORS(app)
 
 # Thiết lập GPIO cho đèn và quạt
 #light = PWMLED(17)  # GPIO pin cho đèn
-#fan = PWMLED(27)  # GPIO pin cho quạt (PWM)
+#fan = PWM(27)  # GPIO pin cho quạt (PWM)
 #fan.value = 0.5
 
 # Thiết lập trạng thái ban đầu của các thiết bị
@@ -20,7 +20,7 @@ devices = {
         "usageTime": 0,
     },
     "fan": {
-        "status": "Low",
+        "status": "Off",
         "speed": 0,
         "usageTime": 0,
     }
@@ -44,9 +44,12 @@ def update_device_status():
                 if brightness is not None:
                     devices[device]["brightness"] = brightness * 100
 
+                # Trích xuất isDiffer
+                isDiffer = data.get("isDiffer")
+
                 if status == "On":
                     # Bật đèn
-                    # if brightness:
+                    # if brightness is not None:
                     #     light.value(brightness)
                     # else:
                     #     light.on()
@@ -61,7 +64,11 @@ def update_device_status():
                         current_time = time.time()
                         devices[device]["last_usage_time"] = current_time
 
-                    devices[device]["switchCount"] += 1
+                    if brightness is not None:
+                        if isDiffer == True:
+                            devices[device]["switchCount"] += 1  
+                    else:
+                            devices[device]["switchCount"] += 1  
                 else:
                     # Tắt đèn
                     #light.off()
@@ -73,7 +80,11 @@ def update_device_status():
                         elapsed_time = current_time - devices[device]["last_usage_time"]
                         devices[device]["usageTime"] += elapsed_time
 
-                    devices[device]["switchCount"] += 1                          
+                    if brightness is not None:
+                        if isDiffer == True:
+                            devices[device]["switchCount"] += 1  
+                    else:
+                            devices[device]["switchCount"] += 1  
             #################### Nếu là quạt ########################
             elif device == "fan":
                 # Trích xuất giá trị tốc độ quạt từ yêu cầu (fan_speed từ 0 đến 1)
@@ -82,12 +93,12 @@ def update_device_status():
                 if fan_speed is not None:
                     devices[device]["speed"] = fan_speed * 100
 
-                if status == "High":
+                if status == "On":
                     # Điều chỉnh tốc độ quạt
                     #fan.value = fan_speed
                     
                     # Cập nhật trạng thái sử dụng của quạt
-                    devices[device]["status"] = "High"
+                    devices[device]["status"] = "On"
 
                     if "last_usage_time" not in devices[device]:
                         current_time = time.time()
@@ -100,14 +111,12 @@ def update_device_status():
                     # Tắt quạt
                     #fan.off()
                     
-                    # Cập nhật trạng thái sử dụng của quạt
-                    devices[device]["status"] = "Low"
-                   
+                    # Cập nhật trạng thái sử dụng của đèn
+                    devices[device]["status"] = "Off"
                     if "last_usage_time" in devices[device]:
                         current_time = time.time()
                         elapsed_time = current_time - devices[device]["last_usage_time"]
                         devices[device]["usageTime"] += elapsed_time
-
     return 'Success', 200
 
 if __name__ == '__main__':
