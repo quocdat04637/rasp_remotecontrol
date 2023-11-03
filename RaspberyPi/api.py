@@ -1,15 +1,31 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-#from gpiozero import LED, PWMLED
+# from gpiozero import PWMLED
+# import RPi.GPIO as GPIO
 import time
 
-app = Flask(__name__)
+app = Flask(__name__)      
 cors = CORS(app)
 
-# Thiết lập GPIO cho đèn và quạt
-#light = PWMLED(17)  # GPIO pin cho đèn
-#fan = PWM(27)  # GPIO pin cho quạt (PWM)
-#fan.value = 0.5
+# LIGHT_PIN = 17  # GPIO pin for the light control  
+# FAN_PIN = 27  # GPIO pin for the fan control
+ 
+
+# # Thiết lập GPIO cho đèn
+# light = PWMLED(LIGHT_PIN)  # GPIO pin cho đèn
+
+# # Sử dụng chế độ BCM cho các chân GPIO
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(FAN_PIN, GPIO.OUT)
+
+
+# # Thiết lập chân GPIO27 làm đầu ra PWM cho quạt với tần số 100Hz
+# fan = GPIO.PWM(FAN_PIN, 100)
+
+# # Bắt đầu với tốc độ quạt ban đầu là 0%
+# fan.start(0) 
+
+
 
 # Thiết lập trạng thái ban đầu của các thiết bị
 devices = {
@@ -95,7 +111,7 @@ def update_device_status():
 
                 if status == "On":
                     # Điều chỉnh tốc độ quạt
-                    #fan.value = fan_speed
+                    #fan.ChangeDutyCycle(fan_speed * 100)
                     
                     # Cập nhật trạng thái sử dụng của quạt
                     devices[device]["status"] = "On"
@@ -109,7 +125,7 @@ def update_device_status():
 
                 else:
                     # Tắt quạt
-                    #fan.off()
+                    #fan.stop()
                     
                     # Cập nhật trạng thái sử dụng của đèn
                     devices[device]["status"] = "Off"
@@ -120,5 +136,7 @@ def update_device_status():
     return 'Success', 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-
+    #try:
+        app.run(host='0.0.0.0', port=8080)
+    #finally:
+        #GPIO.cleanup()
