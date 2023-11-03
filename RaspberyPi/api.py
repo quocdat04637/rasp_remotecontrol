@@ -63,6 +63,9 @@ def update_device_status():
                 # Trích xuất isDiffer
                 isDiffer = data.get("isDiffer")
 
+                # Trích xuất isSwitch
+                isSwitch = data.get("isSwitch")
+
                 if status == "On":
                     # Bật đèn
                     # if brightness is not None:
@@ -85,6 +88,9 @@ def update_device_status():
                             devices[device]["switchCount"] += 1  
                     else:
                             devices[device]["switchCount"] += 1  
+                    
+                    if isSwitch is not None:
+                            devices[device]["switchCount"] += 1  
                 else:
                     # Tắt đèn
                     #light.off()
@@ -100,6 +106,9 @@ def update_device_status():
                         if isDiffer == True:
                             devices[device]["switchCount"] += 1  
                     else:
+                            devices[device]["switchCount"] += 1  
+                            
+                    if isSwitch is not None:
                             devices[device]["switchCount"] += 1  
             #################### Nếu là quạt ########################
             elif device == "fan":
