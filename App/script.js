@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     function sendLightRequestUpdateBrightness(newStatus, brightness, isDiffer) {
-        console.log(isDiffer);
         // Tạo đối tượng JSON để gửi lên máy chủ
         const requestData = {
             light: newStatus,
@@ -141,13 +140,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 }, 1000);
 
 
+                // Tạo đối tượng JSON để gửi lên máy chủ
+                const requestData = {
+                    light: "Off",
+                    brightness: 0,
+                    isSwitch: true,
+                };
                 setTimeout(() => {
                     fetch("http://127.0.0.1:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ light: "Off" })
+                        body: JSON.stringify(requestData)
                     })
                     .then(response => {
                         if (response.status === 200) {
@@ -155,13 +160,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             lightButton.textContent = "Off";
                             lightButton.style.background = "red";
                             lightStatus.textContent = "Off";
+                            lightBrightnessValue.textContent = "0%";
+                            lightBrightnessRange.value = 0;
                         }
                     })
                     .catch(error => console.error(error));
                 }, delaySeconds * 1000);
             }
             turnOffDelayInput.value = 0;
-            //turnOffStepSpan.textContent = "?";
         })
         .catch(error => console.error(error));
     })
@@ -191,13 +197,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 }, 1000);
 
 
+                // Tạo đối tượng JSON để gửi lên máy chủ
+                const requestData = {
+                    light: "On",
+                    brightness: 1,
+                    isSwitch: true,
+                };
                 setTimeout(() => {
                     fetch("http://127.0.0.1:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ light: "On" })
+                        body: JSON.stringify(requestData)
                     })
                     .then(response => {
                         if (response.status === 200) {
@@ -205,13 +217,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             lightButton.textContent = "On";
                             lightButton.style.background = "green";
                             lightStatus.textContent = "On";
+                            lightBrightnessValue.textContent = "100%";
+                            lightBrightnessRange.value = 100;
                         }
                     })
                     .catch(error => console.error(error));
                 }, delaySeconds * 1000);
             }
             turnOnDelayInput.value = 0;
-            //turnOnStepSpan.textContent = "?";
         })
         .catch(error => console.error(error));
     })
@@ -238,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function() {
             fan: newStatus,
             fanSpeed: speed,
         };
-
         fetch("http://127.0.0.1:8080/api/device-status", {
             method: "POST",
             headers: {
