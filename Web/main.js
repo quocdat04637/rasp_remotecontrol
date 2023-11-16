@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function refreshDeviceStatus() {
         // Gửi yêu cầu GET để lấy trạng thái từ API
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.54:8080/api/device-status")
             .then(response => response.json())
             .then(data => {
                     // Cập nhật thông tin từ dữ liệu lấy được

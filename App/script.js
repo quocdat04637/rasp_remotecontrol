@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Xử lý sự kiện khi nhấn nút On/Off
     lightButton.addEventListener("click", function() {
         // Lấy trạng thái hiện tại của đèn
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.54:8080/api/device-status")
         .then(response => response.json())
         .then(data => {
             const currentLightStatus = data.light.status;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function sendLightRequest(newStatus) {
-        fetch("http://127.0.0.1:8080/api/device-status", {
+        fetch("http://192.168.137.54:8080/api/device-status", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     lightBrightnessRange.value = 100;
                     lightBrightnessValue.textContent = "100%";
                     // Gửi cập nhật lên máy chủ
-                    fetch("http://127.0.0.1:8080/api/device-status", {
+                    fetch("http://192.168.137.54:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     lightBrightnessRange.value = 0;
                     lightBrightnessValue.textContent = "0%";
                     // Gửi cập nhật lên máy chủ
-                    fetch("http://127.0.0.1:8080/api/device-status", {
+                    fetch("http://192.168.137.54:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Xử lý sự kiện khi kéo thanh độ sáng đèn
     lightBrightnessRange.addEventListener("input", function() {
         // Lấy trạng thái hiện tại của đèn
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.54:8080/api/device-status")
         .then(response => response.json())
         .then(data => {
             const oldLightStatus = data.light.status;
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
             isDiffer: isDiffer
         };
 
-        fetch("http://127.0.0.1:8080/api/device-status", {
+        fetch("http://192.168.137.54:8080/api/device-status", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Xử lý sự kiện khi thay đổi thời gian đếm ngược để tắt đèn
     turnOffDelayInput.addEventListener("change", function() {
         // Lấy trạng thái hiện tại của đèn
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.54:8080/api/device-status")
         .then(response => response.json())
         .then(data => {
             const currentLightStatus = data.light.status;
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     isSwitch: true,
                 };
                 setTimeout(() => {
-                    fetch("http://127.0.0.1:8080/api/device-status", {
+                    fetch("http://192.168.137.54:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Xử lý sự kiện khi thay đổi thời gian đếm ngược để bật đèn
     turnOnDelayInput.addEventListener("change", function() {
         // Lấy trạng thái hiện tại của đèn
-        fetch("http://127.0.0.1:8080/api/device-status")
+        fetch("http://192.168.137.54:8080/api/device-status")
         .then(response => response.json())
         .then(data => {
             const currentLightStatus = data.light.status;
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     isSwitch: true,
                 };
                 setTimeout(() => {
-                    fetch("http://127.0.0.1:8080/api/device-status", {
+                    fetch("http://192.168.137.54:8080/api/device-status", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     // xử lý sự kiện khi kéo thanh tốc độ quạt
-    fanSpeedRange.addEventListener("input", function() {
+    fanSpeedRange.addEventListener("change", function() {
         const speed = fanSpeedRange.value;
         fanSpeedValue.textContent = speed + "%";
         updateFanSpeed(speed/100);
@@ -246,12 +246,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function sendFanRequest(newStatus, speed) {
+        console.log("Newstatus: ", newStatus);
         // Tạo đối tượng JSON để gửi lên máy chủ
         const requestData = {
             fan: newStatus,
             fanSpeed: speed,
         };
-        fetch("http://127.0.0.1:8080/api/device-status", {
+        fetch("http://192.168.137.54:8080/api/device-status", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
